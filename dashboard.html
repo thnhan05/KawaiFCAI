@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FruitCare AI - Smart Inspection System</title>
+    <link rel="stylesheet" href="dashboard.css?v=2.1">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header" style="justify-content: center; padding: 1rem 0; display: flex;">
+                <img src="IMG/logo.png" alt="FruitCare AI" style="max-width: 140px; object-fit: contain;">
+            </div>
+            <ul class="nav-menu">
+                <li class="active" id="nav-dashboard"><i class="fa-solid fa-chart-pie"></i> <span data-i18n="dashboardNav">Dashboard</span></li>
+                <li id="nav-spectrum"><i class="fa-solid fa-wave-square" style="transform: scaleX(-1) rotate(-90deg);"></i> <span data-i18n="spectrumNav">Spectrum Analysis</span></li>
+                <li style="display: none;"><i class="fa-solid fa-video"></i> Live Inspection</li>
+                <li style="display: none;"><i class="fa-solid fa-layer-group"></i> Batch Analysis</li>
+                <li id="nav-roi" style="display: none;"><i class="fa-solid fa-chart-line"></i> ROI & Reports</li>
+                <li style="display: none;"><i class="fa-solid fa-gear"></i> Settings</li>
+            </ul>
+            <div class="system-status">
+                <div class="status-indicator"></div>
+                <span data-i18n="systemOnline">System Online</span>
+                <small data-i18n="cameraActive">Hyperspectral Camera: Active</small>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="header-titles">
+                    <h1 data-i18n="mainTitle">Smart Fruit Quality Inspection System</h1>
+                    <p data-i18n="subTitle">AI-powered hyperspectral bruise detection for industrial fruit grading</p>
+                </div>
+                <div class="header-actions">
+                    <div class="lang-switch-container">
+                        <button id="btn-lang-en" class="lang-btn active">EN</button>
+                        <button id="btn-lang-vi" class="lang-btn">VI</button>
+                    </div>
+                    <div class="batch-selector">
+                        <label data-i18n="currentBatch">Current Batch:</label>
+                        <select>
+                            <option>Batch #A-092 (Mango)</option>
+                            <option>Batch #A-091 (Tomato)</option>
+                        </select>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Metrics Row -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+                    <div class="metric-data">
+                        <h3 data-i18n="metricTotal">Total Processed</h3>
+                        <div class="value counter" id="totalProcessed">12,450</div>
+                        <span class="trend up"><i class="fa-solid fa-arrow-up"></i> <span data-i18n="trendVsTdy">4.5% vs yesterday</span></span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon alert"><i class="fa-solid fa-circle-exclamation"></i></div>
+                    <div class="metric-data">
+                        <h3 data-i18n="metricRejected">Rejected Rate</h3>
+                        <div class="value" id="rejectRate">8.2%</div>
+                        <span class="trend down"><i class="fa-solid fa-arrow-down"></i> <span data-i18n="trendImproved">-1.2% (improved)</span></span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon success"><i class="fa-solid fa-check-double"></i></div>
+                    <div class="metric-data">
+                        <h3 data-i18n="metricAccuracy">Accuracy</h3>
+                        <div class="value">99.4%</div>
+                        <span class="trend neutral" data-i18n="trendLab">Based on Lab Validation</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="dashboard-tab" class="dashboard-grid">
+                <!-- Live Analysis (Hình 2 Equivalent) -->
+                <div class="card col-span-2 live-analysis-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-satellite-dish blink"></i> <span data-i18n="liveAnalysisTitle">Live Single Fruit Analysis</span></h2>
+                        <span class="badge" data-i18n="scannerActive">Scanner Active</span>
+                    </div>
+                    <div class="analysis-container">
+                        <div class="camera-feed sci-fi-container">
+                            <div class="hud-corner top-left"></div>
+                            <div class="hud-corner top-right"></div>
+                            <div class="hud-corner bottom-left"></div>
+                            <div class="hud-corner bottom-right"></div>
+                            <div class="feed-overlay"></div>
+                            <div class="scanner-line"></div>
+                            <img src="IMG/scan_clean.png" alt="Hyperspectral Heatmap" class="feed-img" onerror="this.src='https://images.unsplash.com/photo-1550828520-4cb496926fc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
+                            
+                            <!-- Legend inside feed -->
+                            <div class="heatmap-legend">
+                                <div><span class="color-box yellow"></span> <span data-i18n="lgHealthy">Healthy</span></div>
+                                <div><span class="color-box blue"></span> <span data-i18n="lgBruise">Bruise/Damage</span></div>
+                                <div><span class="color-box purple"></span> <span data-i18n="lgBg">Background</span></div>
+                            </div>
+                            
+                            <!-- New Tissue Health Index Overlay -->
+                            <div class="health-index-overlay">
+                                <div class="overlay-title" data-i18n="ixTitle">HYPERSPECTRAL<br>ANALYSIS</div>
+                                <div class="overlay-subtitle" data-i18n="ixSub">TISSUE HEALTH INDEX</div>
+                                <div class="gradient-bar"></div>
+                                <div class="gradient-labels">
+                                    <span data-i18n="ixDamaged">DAMAGED</span>
+                                    <span data-i18n="ixHealthy">HEALTHY</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="analysis-details">
+                            <div class="processing-steps-visual">
+                                <div class="step-card active" id="step1">
+                                    <div class="icon-circle"><i class="fa-solid fa-cube"></i></div>
+                                    <div class="step-info">
+                                        <span class="step-num">(i)</span>
+                                        <span class="step-text" data-i18n="st1Title">Hyperspectral Cube</span>
+                                    </div>
+                                    <div class="step-status" data-i18n="st1Status">Acquired</div>
+                                </div>
+                                <div class="step-connector"></div>
+                                <div class="step-card active" id="step2">
+                                    <div class="icon-circle"><i class="fa-solid fa-crop"></i></div>
+                                    <div class="step-info">
+                                        <span class="step-num">(ii)</span>
+                                        <span class="step-text" data-i18n="st2Title">Segmentation</span>
+                                    </div>
+                                    <div class="step-status" data-i18n="st2Status">Masked</div>
+                                </div>
+                                <div class="step-connector"></div>
+                                <div class="step-card active pulse-step" id="step3">
+                                    <div class="icon-circle"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                                    <div class="step-info">
+                                        <span class="step-num">(iii)</span>
+                                        <span class="step-text" data-i18n="st3Title">Defect Detection</span>
+                                    </div>
+                                    <div class="step-status" data-i18n="st3Status">Analyzing...</div>
+                                </div>
+                            </div>
+                            
+                            <div class="current-result">
+                                <h4 id="currentSampleHeading">Current Sample ID: #SAMPLE-0892</h4>
+                                <div class="detailed-metrics-grid">
+                                    <div class="metric-item">
+                                        <span class="label" data-i18n="lblBrix">Brix (Sweetness)</span>
+                                        <span class="value" id="currentBrix">12.1%</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="label" data-i18n="lblRipe">Ripeness Stage</span>
+                                        <span class="value" id="currentRipeness">Stage 4 (Ripe)</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="label" data-i18n="lblPest">Pesticide Residue</span>
+                                        <span class="value" id="currentPesticide">Safe (<0.01ppm)</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="label" data-i18n="lblFungi">Fungal Exudate</span>
+                                        <span class="value" id="currentFungi">Negative</span>
+                                    </div>
+                                </div>
+                                <div class="damage-meter-container">
+                                    <div class="label" data-i18n="lblDamage">Damage Proportion</div>
+                                    <div class="value" id="currentDamage">61.00%</div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 61%; background: #e74c3c;"></div>
+                                </div>
+                                <div class="classification" id="currentStatus">
+                                    <h2 class="status-rejected">REJECTED</h2>
+                                </div>
+                                <p class="reason"><i class="fa-solid fa-triangle-exclamation"></i> Subsurface bruise detected. Exceeds 15% threshold.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Batch Summary (Hình 1 Equivalent) -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 data-i18n="qualitySummary">Quality Classification Summary</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="qualityChart"></canvas>
+                    </div>
+                    <div class="chart-legend-custom">
+                        <div class="legend-item"><span class="dot accepted"></span> <span data-i18n="chartAccepted">Accepted</span> (91.8%)</div>
+                        <div class="legend-item"><span class="dot rejected"></span> <span data-i18n="chartRejected">Rejected</span> (8.2%)</div>
+                    </div>
+                </div>
+
+                <!-- Recent Inspections Data Table -->
+                <div class="card col-span-3">
+                    <div class="card-header">
+                        <h2 data-i18n="recentLogs">Recent Conveyor Logs</h2>
+                        <button class="btn-export"><i class="fa-solid fa-download"></i> <span data-i18n="exportCsv">Export CSV</span></button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th data-i18n="colTime">Timestamp</th>
+                                    <th data-i18n="colId">Sample ID</th>
+                                    <th data-i18n="colBrix">Brix Est.</th>
+                                    <th data-i18n="colRipe">Ripeness</th>
+                                    <th data-i18n="colPest">Pesticide</th>
+                                    <th data-i18n="colFungi">Fungi Detect</th>
+                                    <th data-i18n="colDmg">Damage %</th>
+                                    <th data-i18n="colStatus">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logTableBody">
+                                <!-- Data populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROI & Report Tab (Hidden by default) -->
+            <div id="roi-tab" class="dashboard-grid" style="display: none;">
+                <div class="card col-span-3">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-chart-line"></i> Return on Investment (ROI) Calculator</h2>
+                    </div>
+                    <div class="roi-container">
+                        <div class="roi-inputs">
+                            <h3 style="margin-bottom: 1rem; color: var(--accent-blue);">Current Manual Costs</h3>
+                            <div class="input-group">
+                                <label>Number of Manual Sorters per Shift</label>
+                                <input type="number" value="4" class="roi-input">
+                            </div>
+                            <div class="input-group">
+                                <label>Average Salary per Worker (VND/month)</label>
+                                <input type="number" value="7500000" class="roi-input">
+                            </div>
+                            <div class="input-group">
+                                <label>Cost of False Rejections & Returns (VND/month)</label>
+                                <input type="number" value="15000000" class="roi-input">
+                            </div>
+                            
+                            <h3 style="margin-bottom: 1rem; margin-top: 2rem; color: var(--accent-green);">FruitCare AI Investment</h3>
+                            <div class="input-group">
+                                <label>System Setup & License (VND)</label>
+                                <input type="number" value="150000000" class="roi-input">
+                            </div>
+                        </div>
+                        <div class="roi-results">
+                            <div class="roi-summary-card">
+                                <h3>Estimated Monthly Savings</h3>
+                                <div class="value text-green">38,500,000 ₫</div>
+                                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 5px;">(Saved Labor + Reduced False Rejections)</p>
+                            </div>
+                            
+                            <div class="roi-summary-card dark">
+                                <h3>Payback Period (Breakeven)</h3>
+                                <div class="value text-blue">3.8 Months</div>
+                                <div class="progress-bar" style="margin-top: 15px; background: rgba(255,255,255,0.1);">
+                                    <div class="progress-fill" style="width: 32%; background: var(--accent-blue);"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="roi-chart-wrapper" style="height: 200px; margin-top: 1.5rem;">
+                                <canvas id="roiChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spectrum Analysis Tab (Hidden by default) -->
+            <div id="spectrum-tab" class="dashboard-grid" style="display: none;">
+                <div class="card col-span-3">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-wave-square"></i> Hyperspectral Analysis Toolbox</h2>
+                        <span class="badge">Live Spectral Graphing Active</span>
+                    </div>
+                    <div class="spectrum-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <div class="spectrum-visual">
+                            <h3 style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-light);">Data Visualization / Mask</h3>
+                            <div class="camera-feed" id="spectrum-camera-feed" style="width: 100%; max-width: 400px; margin: 0 auto; position: relative; cursor: crosshair;">
+                                <img src="IMG/scan_clean.png" class="feed-img" style="filter: none; width: 100%; display: block;" onerror="this.src='https://images.unsplash.com/photo-1550828520-4cb496926fc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
+                                <div class="crosshair" id="spectrum-crosshair" style="position: absolute; top: 45%; left: 55%; width: 20px; height: 20px; border: 1px solid white; border-radius: 50%; pointer-events: none; mix-blend-mode: difference; transform: translate(-50%, -50%); transition: all 0.2s ease;">
+                                    <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: white;"></div>
+                                    <div style="position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: white;"></div>
+                                </div>
+                                <div class="pixel-info" id="spectrum-pixel-info" style="position: absolute; top: 38%; left: 60%; background: rgba(255,255,255,0.9); color: var(--primary-dark); padding: 4px 8px; font-weight: bold; font-size: 0.75rem; border: 1px solid var(--primary); border-radius: 4px; pointer-events: none; transition: all 0.2s ease;">
+                                    [X,Y] [248 185]<br>[Intensity] 0.271
+                                </div>
+                            </div>
+                        </div>
+                        <div class="spectrum-chart-wrapper">
+                            <h3 style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-light);" id="spectrum-chart-title">Pixel [248, 185] Spectrum (Wavelength nm)</h3>
+                            <div style="height: 300px; width: 100%; background: white; border-radius: 8px; padding: 1rem; border: 1px solid var(--bg-light);">
+                                <canvas id="spectrumLiveChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+            <p style="text-align: center; color: var(--text-light); margin-top: 2rem; font-size: 0.9rem;">
+                <a href="index.html" style="color: var(--primary); text-decoration: none;"><i class="fa-solid fa-arrow-left"></i> Back to Landing Page</a>
+            </p>
+        </main>
+    </div>
+    <script src="dashboard.js"></script>
+</body>
+</html>
