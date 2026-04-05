@@ -33,10 +33,16 @@ html {
 }
 
 body {
-  color: var(--text-dark);
   background-color: var(--bg-white);
+  color: var(--text-dark);
   line-height: 1.6;
   overflow-x: hidden;
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .container {
@@ -98,6 +104,7 @@ h1, h2, h3, h4 {
   transition: var(--transition);
   border: none;
   outline: none;
+  white-space: nowrap;
 }
 
 .btn-lg {
@@ -335,6 +342,7 @@ h1, h2, h3, h4 {
 
 .hero-cta {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
 }
 

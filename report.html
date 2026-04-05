@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Report & Quality Performance - FruitCare AI</title>
+    <!-- Use base landing styles for hero, layout, colors -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Use dashboard styles for metric cards and charts -->
+    <link rel="stylesheet" href="dashboard.css">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background-color: var(--bg-light); color: var(--text-dark); }
+        .report-hero {
+            background: linear-gradient(135deg, var(--bg-blue-light) 0%, #FFFFFF 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .report-container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; }
+        .section-panel { margin-bottom: 3rem; }
+        .section-title-wrap { margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem; }
+        .section-title-wrap i { color: var(--primary); font-size: 1.4rem; }
+        .section-title-wrap h2 { font-size: 1.4rem; color: var(--primary-dark); }
+        
+        .prog-container { margin-bottom: 1.2rem; }
+        .prog-header { display: flex; justify-content: space-between; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; }
+        .prog-bar-bg { height: 10px; background: var(--bg-light); border-radius: 5px; overflow: hidden; }
+        .prog-bar-fill { height: 100%; border-radius: 5px; }
+
+        .widget-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .recommendation-widget {
+            background: white; border-radius: var(--radius-lg); padding: 1.5rem;
+            box-shadow: var(--shadow-sm); border-top: 4px solid var(--accent-yellow);
+            display: flex; flex-direction: column;
+        }
+        .recommendation-widget.danger { border-top-color: var(--accent-red); }
+        .recommendation-widget.success { border-top-color: var(--accent-green); }
+        
+        .rec-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 0.5rem; color: var(--primary-dark); }
+        .rec-body { font-size: 0.9rem; color: var(--text-light); flex-grow: 1; margin-bottom: 1.5rem; }
+        .rec-highlight { padding: 0.8rem; background: var(--bg-blue-light); border-radius: 8px; margin-bottom: 1rem; font-size: 0.85rem; font-weight: 600; color: var(--primary); }
+    </style>
+</head>
+<body>
+    <!-- Top Nav -->
+    <nav style="background: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm);">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <img src="IMG/logo.png" alt="FruitCare AI" style="max-height: 90px; width: auto; object-fit: contain;">
+            <span style="font-weight: 800; color: var(--primary-dark); font-size: 1.4rem; padding-left: 1rem; border-left: 2px solid var(--bg-light);">FINANCIAL INTELLIGENCE</span>
+        </div>
+        <div>
+            <a href="index.html" class="btn btn-outline" style="padding: 0.5rem 1rem; border-radius: 20px;"><i class="fa-solid fa-arrow-left"></i> Back to Landing Page</a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="report-hero">
+        <h1 style="font-size: 2.2rem; margin-bottom: 1rem; color: var(--primary-dark);">BUSINESS PERFORMANCE & CROP QUALITY DASHBOARD</h1>
+        <p style="font-size: 1.1rem; color: var(--text-light); max-width: 800px; margin: 0 auto 2rem auto;">Smart management platform for enterprises: Track revenue, analyze profit margins per batch, and receive automated operational optimization recommendations directly from the FruitCare AI data system.</p>
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+            <button class="btn btn-primary" onclick="alert('Exporting PDF Report...')"><i class="fa-solid fa-file-export"></i> Export Report</button>
+            <a href="#recommendations" class="btn btn-outline"><i class="fa-solid fa-wand-magic-sparkles"></i> View Auto-Optimizations</a>
+        </div>
+    </section>
+
+    <div class="report-container">
+        <!-- SECTION 1: KEY METRICS -->
+        <section class="section-panel">
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: rgba(46, 204, 113, 0.1); color: var(--accent-green);"><i class="fa-solid fa-sack-dollar"></i></div>
+                    <div class="metric-data">
+                        <h3>Total Sales (VND)</h3>
+                        <div class="value" style="font-size: 1.5rem;">125.5 Billion</div>
+                        <span class="trend up"><i class="fa-solid fa-arrow-up"></i> +12% YTD</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: rgba(0, 180, 216, 0.1); color: var(--primary);"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="metric-data">
+                        <h3>Total Profit (VND)</h3>
+                        <div class="value" style="font-size: 1.5rem;">28.25 Billion</div>
+                        <span class="trend up"><i class="fa-solid fa-arrow-up"></i> +4.5% YTD</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: rgba(241, 196, 15, 0.1); color: #f39c12;"><i class="fa-solid fa-boxes-packing"></i></div>
+                    <div class="metric-data">
+                        <h3>Total Units Sold</h3>
+                        <div class="value" style="font-size: 1.5rem;">8.5M Fruits</div>
+                        <span class="trend neutral">~17,000 Batches</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: rgba(155, 89, 182, 0.1); color: #9b59b6;"><i class="fa-solid fa-truck-fast"></i></div>
+                    <div class="metric-data">
+                        <h3>Avg. Delivery Time</h3>
+                        <div class="value" style="font-size: 1.5rem;">4.5 Days</div>
+                        <span class="trend down"><i class="fa-solid fa-circle-exclamation"></i> High Risk Warning</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GRID ROW: Brand Perf & Retailers Perf -->
+        <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 3rem;">
+            <!-- SECTION 2: BRAND PERFORMANCE -->
+            <section class="card">
+                <div class="section-title-wrap">
+                    <i class="fa-solid fa-tag"></i><h2>Brand Performance by Crop</h2>
+                </div>
+                <div>
+                    <div class="prog-container">
+                        <div class="prog-header"><span>🥭 Mango (32% Margin)</span> <span>2.5M units</span></div>
+                        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width: 100%; background: #2ecc71;"></div></div>
+                    </div>
+                    <div class="prog-container">
+                        <div class="prog-header"><span>🐉 Dragon Fruit (28% Margin)</span> <span>2.1M units</span></div>
+                        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width: 85%; background: #27ae60;"></div></div>
+                    </div>
+                    <div class="prog-container">
+                        <div class="prog-header"><span>🍊 Orange (25% Margin)</span> <span>1.8M units</span></div>
+                        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width: 72%; background: #f1c40f;"></div></div>
+                    </div>
+                    <div class="prog-container">
+                        <div class="prog-header"><span>🍅 Tomato (21% Margin)</span> <span>1.2M units</span></div>
+                        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width: 48%; background: #e67e22;"></div></div>
+                    </div>
+                    <div class="prog-container">
+                        <div class="prog-header"><span>🍒 Rambutan (15% Margin)</span> <span>900K units</span></div>
+                        <div class="prog-bar-bg"><div class="prog-bar-fill" style="width: 36%; background: #e74c3c;"></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: RETAILERS PERFORMANCE -->
+            <section class="card">
+                <div class="section-title-wrap">
+                    <i class="fa-solid fa-store"></i><h2>Retailer Distribution (Revenue)</h2>
+                </div>
+                <div style="height: 250px; width: 100%;">
+                    <canvas id="retailerChart"></canvas>
+                </div>
+            </section>
+        </div>
+
+        <!-- GRID ROW: Regional & Annual Trend -->
+        <div class="dashboard-grid" style="grid-template-columns: 1fr 2fr; margin-bottom: 3rem;">
+            <!-- SECTION 4: REGIONAL PERFORMANCE -->
+            <section class="card">
+                <div class="section-title-wrap">
+                    <i class="fa-solid fa-map-location-dot"></i><h2>Regional Profitability</h2>
+                </div>
+                <div style="height: 200px; margin-bottom: 1rem;">
+                    <canvas id="regionPieChart"></canvas>
+                </div>
+                <div style="background: var(--bg-blue-light); padding: 1rem; border-radius: 8px;">
+                    <h4 style="font-size: 0.85rem; color: var(--text-light); text-transform: uppercase; margin-bottom: 0.5rem;">Top 5 Cities (Revenue)</h4>
+                    <ul style="list-style: none; padding: 0; font-size: 0.9rem; margin: 0;">
+                        <li style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(0,0,0,0.05); padding: 4px 0;"><span>1. HCMC</span> <strong>48B</strong></li>
+                        <li style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(0,0,0,0.05); padding: 4px 0;"><span>2. Hanoi</span> <strong>35B</strong></li>
+                        <li style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(0,0,0,0.05); padding: 4px 0;"><span>3. Da Nang</span> <strong>18B</strong></li>
+                        <li style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(0,0,0,0.05); padding: 4px 0;"><span>4. Can Tho</span> <strong>14.5B</strong></li>
+                        <li style="display: flex; justify-content: space-between; padding: 4px 0;"><span>5. Hai Phong</span> <strong>10B</strong></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- SECTION 5: ANNUAL TREND -->
+            <section class="card">
+                <div class="section-title-wrap">
+                    <i class="fa-solid fa-chart-area"></i><h2>Annual Growth Trend (Sales vs Profit)</h2>
+                </div>
+                <div style="height: 330px; width: 100%;">
+                    <canvas id="annualTrendChart"></canvas>
+                </div>
+            </section>
+        </div>
+
+        <!-- SECTION 6: OPERATIONAL RECOMMENDATIONS -->
+        <section class="section-panel" id="recommendations">
+            <div class="section-title-wrap">
+                <i class="fa-solid fa-lightbulb" style="color: var(--accent-yellow);"></i><h2>AI Automated Operational Recommendations</h2>
+            </div>
+            
+            <div class="widget-grid">
+                <!-- Kịch bản 1 -->
+                <div class="recommendation-widget danger">
+                    <div class="rec-title"><i class="fa-solid fa-triangle-exclamation"></i> High Spoilage Alert</div>
+                    <div class="rec-highlight">Trigger: Rambutan (15%), Tomato (21%) Margin</div>
+                    <div class="rec-body">
+                        Profit margins for thin-skinned fruits are below average due to physical damage and fungi during transit.
+                        <br><br>
+                        <strong>Recommendation:</strong> Upgrade to the <em>FruitCare AI Standard Package (260M VND)</em> to autonomously detect white fungi and surface micro-bruises, significantly reducing supermarket return rates.
+                    </div>
+                    <a href="index.html#pricing" class="btn btn-outline" style="width: 100%; border-color: var(--accent-red); color: var(--accent-red);">Explore Standard Package</a>
+                </div>
+
+                <!-- Kịch bản 2 -->
+                <div class="recommendation-widget danger">
+                    <div class="rec-title"><i class="fa-solid fa-truck-fast"></i> Transit Degradation Risk</div>
+                    <div class="rec-highlight">Trigger: Transit >4 Days to North Region</div>
+                    <div class="rec-body">
+                        Shipments dispatched to the North region face severe inner spoilage risks due to extended delivery durations (4.5 days average).
+                        <br><br>
+                        <strong>Recommendation:</strong> Integrate the <em>Spoilage Risk Prediction Module (30M VND)</em> or utilize Advanced HSI to eliminate internally compromised fruits before they are packaged.
+                    </div>
+                    <a href="index.html#pricing" class="btn btn-outline" style="width: 100%; border-color: var(--accent-red); color: var(--accent-red);">View Risk Prediction Module</a>
+                </div>
+
+                <!-- Kịch bản 3 -->
+                <div class="recommendation-widget success">
+                    <div class="rec-title"><i class="fa-solid fa-seedling"></i> Catalog Expansion Opportunity</div>
+                    <div class="rec-highlight">Trigger: Stable AI performance across 5 crops</div>
+                    <div class="rec-body">
+                        The AI system is validating the current 5 product tiers flawlessly. Want to capture upcoming seasonal trends (e.g., Durian, Lychee)?
+                        <br><br>
+                        <strong>Opportunity:</strong> Add 1 new fruit data model. For <em>40M VND</em>, our core AI will cross-learn and correctly classify the new crop type in just 1-2 days!
+                    </div>
+                    <a href="index.html#pricing" class="btn btn-outline" style="width: 100%; border-color: var(--accent-green); color: var(--accent-green);">Register New Crop Analysis</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Chart Render Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Retailer Horizontal Bar
+            new Chart(document.getElementById('retailerChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['WinMart', 'Co.opmart', 'GO! (Big C)', 'Bách Hóa Xanh'],
+                    datasets: [{
+                        label: 'Revenue (Billion VND)',
+                        data: [45.5, 38.0, 26.0, 16.0],
+                        backgroundColor: '#337FFF',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            // Region Pie Chart
+            new Chart(document.getElementById('regionPieChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['South Region', 'North Region', 'Central Region'],
+                    datasets: [{
+                        data: [13.5, 9.2, 5.55],
+                        backgroundColor: ['#0056D2', '#00B4D8', '#48CAE4'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '65%',
+                    plugins: { legend: { position: 'right', labels: { boxWidth: 12 } } }
+                }
+            });
+
+            // Annual Trend Line Chart
+            new Chart(document.getElementById('annualTrendChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [
+                        {
+                            label: 'Sum of Total Sales',
+                            data: [14.2, 15.1, 10.5, 9.8, 12.0, 12.5, 9.1, 9.3, 9.0, 10.2, 11.0, 12.1],
+                            borderColor: '#0056D2', backgroundColor: 'rgba(0, 86, 210, 0.05)',
+                            tension: 0.4, fill: true, borderWidth: 3
+                        },
+                        {
+                            label: 'Sum of Operating Profit',
+                            data: [3.8, 4.2, 2.5, 2.0, 3.5, 3.6, 1.2, 1.3, 1.5, 2.2, 2.5, 3.0],
+                            borderColor: '#e74c3c', backgroundColor: 'transparent',
+                            tension: 0.4, fill: false, borderWidth: 2, borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    scales: {
+                        y: { title: { display: true, text: 'Billion VND' }, beginAtZero: true }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

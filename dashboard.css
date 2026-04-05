@@ -34,6 +34,12 @@ body {
   color: var(--text-dark);
   background-color: var(--bg-light);
   line-height: 1.6;
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ---------- LAYOUT ---------- */
@@ -258,6 +264,7 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
+  animation: fadeIn 0.4s ease-out forwards;
 }
 
 .col-span-2 { grid-column: span 2; }
